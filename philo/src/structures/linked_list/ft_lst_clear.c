@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstclear.c                                      :+:      :+:    :+:   */
+/*   ft_lst_clear.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/16 21:25:09 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/16 21:25:11 by ybutkov          ###   ########.fr       */
+/*   Created: 2025/10/17 12:40:33 by ybutkov           #+#    #+#             */
+/*   Updated: 2025/10/17 13:26:36 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,4 +29,19 @@ void	ft_lst_clear(t_linked_list *lst, void (*del)(void *))
 	lst->head = NULL;
 	lst->last = NULL;
 	lst->_size = 0;
+}
+
+int ft_get_size(t_linked_list *lst)
+{
+	if (lst == NULL)
+		return (0);
+	return (lst->_size);
+}
+
+void ft_free_linked_list(t_linked_list *lst, void (*del)(void *))
+{
+	if (lst == NULL)
+		return ;
+	lst->clear(lst, del);
+	free(lst);
 }

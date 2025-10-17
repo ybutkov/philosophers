@@ -10,15 +10,28 @@ PRINT_FLAG = -s --no-print-directory
 
 CC = cc
 # CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address,undefined
-CFLAGS = -Wall -Wextra -Werror -g -O0 $(INCLUDES)
+CFLAGS = -Wall -Wextra -Werror -g -O0 -fsanitize=address,undefined $(INCLUDES)
 
 C_PHILO_FILES = \
 	printer/printer.c \
 	event/event.c \
+	event/event_op.c \
+	dispatcher/dispatcher.c \
+	philos/philosopher.c \
 	utils/time_func.c \
+	utils/ft_atoi.c \
 	structures/base_stack/stack_base_basic.c \
 	structures/base_stack/stack_base_core.c \
-	structures/base_stack/stack_base_operations.c
+	structures/base_stack/stack_base_operations.c \
+	structures/linked_list/create_linked_list.c \
+	structures/linked_list/ft_add_back.c \
+	structures/linked_list/ft_add_front.c \
+	structures/linked_list/ft_lst_iter.c \
+	structures/linked_list/ft_insert.c \
+	structures/linked_list/ft_lst_clear.c \
+	structures/linked_list/ft_delete_node.c \
+	structures/linked_list/ft_lst_new.c
+
 
 
 C_FIlES = $(addprefix $(SRC)/, $(C_PHILO_FILES))

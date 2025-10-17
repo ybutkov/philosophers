@@ -6,7 +6,7 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/16 21:18:27 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/16 21:18:29 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/10/17 12:46:11 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ t_list	*ft_add_front_value(t_linked_list *lst, void *content)
 
 	if (lst == NULL)
 		return (NULL);
-	new = ft_lstnew(content);
+	new = ft_lst_new(content);
 	if (new == NULL)
 		return (NULL);
 	ft_add_front_node(lst, new);

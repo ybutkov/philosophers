@@ -1,20 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstsize.c                                       :+:      :+:    :+:   */
+/*   ft_lst_iter.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/16 21:27:24 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/16 21:27:27 by ybutkov          ###   ########.fr       */
+/*   Created: 2025/10/17 12:39:47 by ybutkov           #+#    #+#             */
+/*   Updated: 2025/10/17 12:39:49 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "linked_list_internal.h"
 
-int	ft_lst_size(t_linked_list *lst)
+void	ft_lst_iter(t_linked_list *lst, void (*f)(void *))
 {
-	if (lst == NULL)
-		return (0);
-	return (lst->_size);
+	t_list	*tmp;
+
+	if (lst == NULL || f == NULL)
+		return ;
+	tmp = lst->head;
+	while (tmp)
+	{
+		f(tmp->content);
+		tmp = tmp->next;
+	}
 }
