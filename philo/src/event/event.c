@@ -6,7 +6,7 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/16 14:12:01 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/17 14:20:35 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/10/18 19:18:17 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ char	*get_event_type_string(t_event_type event_type)
 		TIME_PHILO_FORMAT_OUTPUT "is eating",
 		TIME_PHILO_FORMAT_OUTPUT "is sleeping",
 		TIME_PHILO_FORMAT_OUTPUT "is thinking",
+		TIME_PHILO_FORMAT_OUTPUT "is full",
 		TIME_PHILO_FORMAT_OUTPUT "died"};
 
 	if (event_type <= EVENT_TYPE_NONE || event_type >= EVENT_TYPE_COUNT)
@@ -50,9 +51,29 @@ void	free_event_queue(t_event_queue *queue)
 		return ;
 	if (queue->events)
 		queue->events->free(queue->events, free);
-	if (queue->mutex)
-		free(queue->mutex);
+	if (queue->dead_mutex)
+	{
+		pthread_mutex_destroy(queue->dead_mutex);
+		free(queue->dead_mutex);
+	}
 	free(queue);
+}
+
+static void	mark_someone_dead(t_event_queue *queue)
+{
+	pthread_mutex_lock(queue->dead_mutex);
+	queue->is_someone_dead = 1;
+	pthread_mutex_unlock(queue->dead_mutex);
+}
+
+static int	is_someone_dead(t_event_queue *queue)
+{
+	int	result;
+
+	pthread_mutex_lock(queue->dead_mutex);
+	result = queue->is_someone_dead;
+	pthread_mutex_unlock(queue->dead_mutex);
+	return (result);
 }
 
 t_event_queue	*create_event_queue(void)
@@ -68,16 +89,19 @@ t_event_queue	*create_event_queue(void)
 		free(event_queue);
 		return (NULL);
 	}
-	event_queue->mutex = malloc(sizeof(pthread_mutex_t));
-	if (!event_queue->mutex)
+	event_queue->dead_mutex = malloc(sizeof(pthread_mutex_t));
+	if (!event_queue->dead_mutex)
 	{
 		event_queue->events->free(event_queue->events, free);
 		free(event_queue);
 		return (NULL);
 	}
+	pthread_mutex_init(event_queue->dead_mutex, NULL);
 	event_queue->is_someone_dead = 0;
 	event_queue->free = free_event_queue;
 	event_queue->push_event = push_event;
 	event_queue->pop_event = pop_event;
+	event_queue->mark_someone_dead = mark_someone_dead;
+	event_queue->check_if_someone_dead = is_someone_dead;
 	return (event_queue);
 }

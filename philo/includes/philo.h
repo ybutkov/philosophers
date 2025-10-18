@@ -6,12 +6,18 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 13:51:50 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/17 16:42:37 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/10/18 18:13:39 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
+
+typedef struct s_forks_pair
+{
+	pthread_mutex_t	*left_fork;
+	pthread_mutex_t	*right_fork;
+}					t_forks_pair;
 
 typedef struct s_philo_data
 {
@@ -30,12 +36,22 @@ typedef struct s_philo
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
-	int				number_of_times_each_philosopher_must_eat;
+	int				must_eat_times;
 	t_event_queue	*event_queue;
+	pthread_mutex_t	*left_fork;
+	pthread_mutex_t	*right_fork;
+
+	void			(*take_left_fork)(struct s_philo *philo,
+					t_event_queue *event_queue);
+	void			(*take_right_fork)(struct s_philo *philo,
+					t_event_queue *event_queue);
+	void			(*put_down_forks)(struct s_philo *philo);
+	void			(*do_event_and_sleep)(struct s_philo *philo,
+					t_event_type event_type, int sleep_time_ms);
 }					t_philo;
 
 t_philo				*create_philo(int id, t_philo_data *data,
-						t_event_queue *event_queue);
+						t_event_queue *event_queue, t_forks_pair fork_pair);
 void				*dispatcher_routine(void *arg);
 void				*philosopher_routine(void *arg);
 

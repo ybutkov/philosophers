@@ -10,13 +10,14 @@ PRINT_FLAG = -s --no-print-directory
 
 CC = cc
 # CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address,undefined
-CFLAGS = -Wall -Wextra -Werror -g -O0 -fsanitize=address,undefined $(INCLUDES)
+CFLAGS = -Wall -Wextra -Werror -g -O0 $(INCLUDES)
 
 C_PHILO_FILES = \
 	printer/printer.c \
 	event/event.c \
 	event/event_op.c \
 	dispatcher/dispatcher.c \
+	dispatcher/create_dispatcher_data.c \
 	philos/philosopher.c \
 	utils/time_func.c \
 	utils/ft_atoi.c \
@@ -61,6 +62,9 @@ $(BUILD_DIRS):
 
 $(BUILD_DIR)/%.o : %.c
 	$(CC) $(CFLAGS) -c $< -o $@
+
+t : re
+	./$(NAME) 5 50 20 20 4
 
 .PHONY : all clean fclean re bonus
 
