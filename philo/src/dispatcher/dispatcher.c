@@ -6,7 +6,7 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 13:12:22 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/19 14:54:50 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/10/19 19:46:30 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,6 @@ void	*dispatcher_routine(void *arg)
 	time_eatings = init_time_eatings(dispatcher_data->number_of_philosophers,
 			&already_eaten);
 	is_someone_dead = 0;
-	// printf("Dispatcher started\n");
 	while (is_someone_dead == 0)
 	{
 		// add logic to check for death
@@ -120,5 +119,7 @@ void	*dispatcher_routine(void *arg)
 			event_queue->mark_someone_dead(event_queue);
 	}
 	free(time_eatings);
+	free(already_eaten);
+	free(dispatcher_data);
 	return (NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 13:53:57 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/19 18:56:48 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/10/19 19:49:17 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ static void	*one_philosopher_routine(t_philo *philo)
 	philo->take_left_fork(philo, event_queue);
 	sleep_untill_time_ms(philo->event_queue, get_time_in_milliseconds()
 		+ philo->time_to_die);
+	free(philo);
 	return (NULL);
 }
 
@@ -91,7 +92,7 @@ void	*philosopher_routine(void *arg)
 			break ;
 	}
 	philo->do_event_and_sleep(philo, EVENT_TYPE_FULLY_EATEN, 0);
-	// printf("Philosopher %d finished\n", philo->id);
+	free(philo);
 	return (NULL);
 }
 

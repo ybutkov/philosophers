@@ -19,8 +19,10 @@ C_PHILO_FILES = \
 	dispatcher/dispatcher.c \
 	dispatcher/create_dispatcher_data.c \
 	philos/philosopher.c \
+	philos/philo_data.c \
 	utils/time_func.c \
 	utils/compare_util.c \
+	utils/free_and_set_null.c \
 	utils/ft_atoi.c \
 	structures/base_stack/stack_base_basic.c \
 	structures/base_stack/stack_base_core.c \

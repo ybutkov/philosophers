@@ -6,7 +6,7 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/16 14:12:01 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/18 19:18:17 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/10/19 19:29:18 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,12 @@ void	free_event_queue(t_event_queue *queue)
 		return ;
 	if (queue->events)
 		queue->events->free(queue->events, free);
+	queue->events = NULL;
 	if (queue->dead_mutex)
 	{
 		pthread_mutex_destroy(queue->dead_mutex);
 		free(queue->dead_mutex);
+		queue->dead_mutex = NULL;
 	}
 	free(queue);
 }
