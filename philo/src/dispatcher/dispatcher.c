@@ -6,7 +6,7 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 13:12:22 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/18 19:42:00 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/10/19 14:54:50 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,19 +54,14 @@ static int	check_death(t_dispatcher_data *dispatcher_data,
 	{
 		if (!already_eaten[i] && time_eatings[i] < border_time)
 		{
-			printf("%ld %d died\n", get_time_in_milliseconds(), i);
+			printf("%ld %d died\n", get_time_in_milliseconds(), i + 1);
 			return (1);
 		}
 		eaten_count += already_eaten[i];
 		i++;
 	}
 	if (eaten_count == dispatcher_data->number_of_philosophers)
-		{
-			// printf("All philosophers have eaten required times\n");
-			return (1);
-		}
-	// printf("eaten_count: %d\n", eaten_count);
-	// printf("All philosophers \n");
+		return (1);
 	return (0);
 }
 
@@ -119,8 +114,11 @@ void	*dispatcher_routine(void *arg)
 				time_eatings[event->philo_id - 1] = event->timestamp;
 			free(event);
 		}
+		is_someone_dead = check_death(dispatcher_data, time_eatings,
+				already_eaten, is_someone_dead);
+		if (is_someone_dead)
+			event_queue->mark_someone_dead(event_queue);
 	}
 	free(time_eatings);
-	// printf("Dispatcher finished\n");
 	return (NULL);
 }

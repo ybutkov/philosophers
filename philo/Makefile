@@ -20,6 +20,7 @@ C_PHILO_FILES = \
 	dispatcher/create_dispatcher_data.c \
 	philos/philosopher.c \
 	utils/time_func.c \
+	utils/compare_util.c \
 	utils/ft_atoi.c \
 	structures/base_stack/stack_base_basic.c \
 	structures/base_stack/stack_base_core.c \
@@ -65,6 +66,10 @@ $(BUILD_DIR)/%.o : %.c
 
 t : re
 	./$(NAME) 5 50 20 20 4
+
+v : re
+	valgrind --leak-check=full --show-leak-kinds=all \
+	--tool=memcheck --errors-for-leak-kinds=all -s ./$(NAME) 1 180 60 60 5
 
 .PHONY : all clean fclean re bonus
 

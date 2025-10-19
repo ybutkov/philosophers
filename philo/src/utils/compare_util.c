@@ -6,7 +6,7 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/08 13:58:36 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/09/28 15:31:18 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/10/19 16:09:01 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,4 +28,11 @@ int	in_set(char ch, char *set)
 		set = set + 1;
 	}
 	return (0);
+}
+
+long int	ft_max(long int a, long int b)
+{
+	if (a > b)
+		return (a);
+	return (b);
 }

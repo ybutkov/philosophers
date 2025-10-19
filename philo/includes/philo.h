@@ -6,7 +6,7 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 13:51:50 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/18 18:13:39 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/10/19 16:03:07 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ typedef struct s_philo_data
 	int				number_of_times_each_philosopher_must_eat;
 	pthread_t		*dispatcher;
 	pthread_t		**philosophers;
+	
+	void 			(*free)(struct s_philo_data *data);
 }					t_philo_data;
 
 typedef struct s_philo
@@ -37,6 +39,7 @@ typedef struct s_philo
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				must_eat_times;
+	long int		last_meal_time;
 	t_event_queue	*event_queue;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;

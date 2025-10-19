@@ -6,7 +6,7 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/16 13:44:07 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/18 18:10:45 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/10/19 19:09:55 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,14 @@ t_philo_data	*parse_arguments(int argc, char const *argv[])
 
 	if (argc < 5 || argc > 6)
 		return (NULL);
+	// check args are digits
+	
+	// if (argc == 6)
+	// 	data = create_philo_data(ft_atoi(argv[1]), ft_atoi(argv[2]),
+	// 			ft_atoi(argv[3]), ft_atoi(argv[4]), ft_atoi(argv[5]));
+	// else
+	// 	data = create_philo_data(ft_atoi(argv[1]), ft_atoi(argv[2]),
+	// 			ft_atoi(argv[3]), ft_atoi(argv[4]), -1);
 	data = malloc(sizeof(t_philo_data));
 	if (!data)
 		return (NULL);
@@ -143,5 +151,6 @@ int	main(int argc, char const *argv[])
 	create_threads(event_queue, philo_data);
 	while (event_queue->is_someone_dead == 0)
 		usleep(5000);
+	// philo_data->
 	return (0);
 }
