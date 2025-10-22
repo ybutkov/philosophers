@@ -6,7 +6,7 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/16 13:44:07 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/19 20:15:09 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/10/22 17:45:48 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@ t_philo_data	*check_philo_data(t_philo_data *data)
 	data->dispatcher = malloc(sizeof(pthread_t));
 	if (!data->dispatcher)
 		return (free(data), NULL);
-	data->philosophers = malloc(data->number_of_philosophers
+	data->philos = malloc(data->number_of_philosophers
 			* sizeof(pthread_t *));
-	if (!data->philosophers)
+	if (!data->philos)
 		return (free(data), free(data->dispatcher), NULL);
 	i = 0;
 	while (i < data->number_of_philosophers)
@@ -44,7 +44,7 @@ t_philo_data	*check_philo_data(t_philo_data *data)
 		// ADD FREE
 		if (!philosopher)
 			return (NULL);
-		data->philosophers[i++] = philosopher;
+		data->philos[i++] = philosopher;
 	}
 	return (data);
 }
@@ -85,7 +85,7 @@ pthread_mutex_t	**create_forks(int number_of_philosophers)
 	return (forks);
 }
 
-void	forks_destroy_and_free(pthread_mutex_t **forks,
+void	forks_destroy_and_free(t_philo **philos, pthread_mutex_t **forks,
 		int number_of_philosophers)
 {
 	int	i;
@@ -97,56 +97,67 @@ void	forks_destroy_and_free(pthread_mutex_t **forks,
 	{
 		pthread_mutex_destroy(forks[i]);
 		free(forks[i]);
+		free(philos[i]);
 		i++;
 	}
 	free(forks);
+	free(philos);
 }
 
-pthread_mutex_t	**create_threads(t_event_queue *event_queue,
-		t_philo_data *data)
+t_philo	**create_philos(t_philo_data *data, t_event_queue *event_queue, pthread_mutex_t **forks)
 {
-	t_philo				*philo;
-	t_dispatcher_data	*dispatcher_data;
-	pthread_mutex_t		**forks;
-	t_forks_pair		fork_pair;
-	int					i;
+	t_forks_pair	fork_pair;
+	t_philo			**philos;
+	int	i;
 
-	forks = create_forks(data->number_of_philosophers);
-	if (!forks)
+	philos = malloc(sizeof(t_philo *) * data->number_of_philosophers);
+	if (!philos)
 		return (NULL);
-	dispatcher_data = create_dispatcher_data(data->number_of_philosophers,
-			data->time_to_die, event_queue);
-	if (!dispatcher_data)
-		return (NULL);
-	pthread_create(data->dispatcher, NULL, dispatcher_routine, dispatcher_data);
-	usleep(500);
 	i = 0;
 	while (i < data->number_of_philosophers)
 	{
 		fork_pair.left_fork = forks[i];
 		fork_pair.right_fork = forks[(i + 1) % data->number_of_philosophers];
-		philo = create_philo(i + 1, data, event_queue, fork_pair);
+		philos[i] = create_philo(i + 1, data, event_queue, fork_pair);
 		// ADD FREE
-		if (!philo)
-			return (NULL);
-		pthread_create(data->philosophers[i], NULL, philosopher_routine, philo);
+		if (!philos[i])
+			return (0);
+		pthread_create(data->philos[i], NULL, philosopher_routine, philos[i]);
 		i++;
 	}
+	return (philos);
+}
+
+int	create_threads(t_event_queue *event_queue, t_philo_data *data)
+{
+	t_philo				**philos;
+	t_dispatcher_data	*dispatcher_data;
+	pthread_mutex_t		**forks;
+	int					i;
+
+	forks = create_forks(data->number_of_philosophers);
+	if (!forks)
+		return (0);
+	dispatcher_data = create_dispatcher_data(data->number_of_philosophers,
+			data->time_to_die, event_queue);
+	if (!dispatcher_data)
+		return (0);
+	pthread_create(data->dispatcher, NULL, dispatcher_routine, dispatcher_data);
+	usleep(500);
+	philos = create_philos(data, event_queue, forks);
 	i = 0;
+	pthread_join(*data->dispatcher, NULL);
 	while (i < data->number_of_philosophers)
-		pthread_detach(*data->philosophers[i++]);
-	pthread_detach(*data->dispatcher);
-	// while (i < data->number_of_philosophers)
-	// 	pthread_join(*data->philosophers[i], NULL);
-	// pthread_join(*data->dispatcher, NULL);
-	return (forks);
+		pthread_join(*data->philos[i++], NULL);
+	forks_destroy_and_free(philos, forks, data->number_of_philosophers);
+	free(dispatcher_data);
+	return (1);
 }
 
 int	main(int argc, char const *argv[])
 {
 	t_event_queue	*event_queue;
 	t_philo_data	*philo_data;
-	pthread_mutex_t	**forks;
 
 	philo_data = parse_arguments(argc, argv);
 	if (!philo_data)
@@ -157,16 +168,14 @@ int	main(int argc, char const *argv[])
 	event_queue = create_event_queue();
 	if (!event_queue)
 		return (free(philo_data), 1);
-	forks = create_threads(event_queue, philo_data);
-	if (forks == NULL)
+	if (create_threads(event_queue, philo_data) == 0)
 	{
 		event_queue->free(event_queue);
 		philo_data->free(philo_data);
 		return (1);
 	}
-	while (event_queue->is_someone_dead == 0)
-		usleep(5000);
-	forks_destroy_and_free(forks, philo_data->number_of_philosophers);
+	// while (event_queue->is_someone_dead == 0)
+	// 	usleep(5000);
 	philo_data->free(philo_data);
 	event_queue->free(event_queue);
 	return (0);

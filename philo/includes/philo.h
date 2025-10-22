@@ -6,7 +6,7 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 13:51:50 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/19 20:02:36 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/10/22 17:13:20 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ typedef struct s_philo_data
 	int				time_to_sleep;
 	int				number_of_times_each_philosopher_must_eat;
 	pthread_t		*dispatcher;
-	pthread_t		**philosophers;
+	pthread_t		**philos;
 
 	void			(*free)(struct s_philo_data *data);
 }					t_philo_data;

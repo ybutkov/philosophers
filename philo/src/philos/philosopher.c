@@ -6,7 +6,7 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 13:53:57 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/19 19:49:17 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/10/22 19:58:51 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,11 @@ static void	*one_philosopher_routine(t_philo *philo)
 	philo->take_left_fork(philo, event_queue);
 	sleep_untill_time_ms(philo->event_queue, get_time_in_milliseconds()
 		+ philo->time_to_die);
-	free(philo);
+	philo->put_down_forks(philo);
 	return (NULL);
 }
 
-static void	wait_until_eating_time(t_philo *philo, t_event_queue *event_queue)
+static void	wait_until_eat_time(t_philo *philo, t_event_queue *event_queue)
 {
 	long int	target_time;
 
@@ -70,7 +70,7 @@ void	*philosopher_routine(void *arg)
 		if (event_queue->check_if_someone_dead(event_queue))
 			break ;
 		philo->do_event_and_sleep(philo, EVENT_TYPE_THINKING, 0);
-		wait_until_eating_time(philo, event_queue);
+		wait_until_eat_time(philo, event_queue);
 		if (philo->id % 2 == 0)
 		{
 			philo->take_left_fork(philo, event_queue);
@@ -92,7 +92,7 @@ void	*philosopher_routine(void *arg)
 			break ;
 	}
 	philo->do_event_and_sleep(philo, EVENT_TYPE_FULLY_EATEN, 0);
-	free(philo);
+	// free(philo);
 	return (NULL);
 }
 
@@ -113,7 +113,8 @@ static void	take_right_fork(t_philo *philo, t_event_queue *event_queue)
 static void	put_down_forks(t_philo *philo)
 {
 	pthread_mutex_unlock(philo->left_fork);
-	pthread_mutex_unlock(philo->right_fork);
+	if (philo->left_fork != philo->right_fork)
+		pthread_mutex_unlock(philo->right_fork);
 }
 
 static void	event_and_sleep(t_philo *philo, t_event_type event_type,

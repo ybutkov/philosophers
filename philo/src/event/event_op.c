@@ -6,7 +6,7 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 13:39:10 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/18 13:49:28 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/10/22 17:44:39 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	push_event(t_event_queue *queue, t_event *event)
 	pthread_mutex_unlock(queue->dead_mutex);
 }
 
-t_event *pop_event(t_event_queue *queue)
+t_event	*pop_event(t_event_queue *queue)
 {
 	t_list	*popped_node;
 	t_event	*event;

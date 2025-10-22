@@ -6,13 +6,13 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/19 13:53:34 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/19 13:54:18 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/10/22 17:44:30 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 
-void free_and_set_null(void **ptr)
+void	free_and_set_null(void **ptr)
 {
 	if (ptr && *ptr)
 	{

@@ -6,7 +6,7 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/19 13:52:32 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/19 19:52:19 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/10/22 17:43:58 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,12 @@ static void	free_philo_data(t_philo_data *data)
 	if (!data)
 		return ;
 	free_and_set_null((void **)&data->dispatcher);
-	if (data->philosophers)
+	if (data->philos)
 	{
 		i = 0;
 		while (i < data->number_of_philosophers)
-			free_and_set_null((void **)&data->philosophers[i++]);
-		free(data->philosophers);
+			free_and_set_null((void **)&data->philos[i++]);
+		free(data->philos);
 	}
 	free(data);
 }
@@ -45,5 +45,3 @@ t_philo_data	*create_philo_data(int number_of_philosophers,
 	data->free = free_philo_data;
 	return (data);
 }
-
-

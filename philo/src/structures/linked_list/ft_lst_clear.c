@@ -6,7 +6,7 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 12:40:33 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/17 13:26:36 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/10/22 17:45:03 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,14 @@ void	ft_lst_clear(t_linked_list *lst, void (*del)(void *))
 	lst->_size = 0;
 }
 
-int ft_get_size(t_linked_list *lst)
+int	ft_get_size(t_linked_list *lst)
 {
 	if (lst == NULL)
 		return (0);
 	return (lst->_size);
 }
 
-void ft_free_linked_list(t_linked_list *lst, void (*del)(void *))
+void	ft_free_linked_list(t_linked_list *lst, void (*del)(void *))
 {
 	if (lst == NULL)
 		return ;

@@ -6,7 +6,7 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 12:40:59 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/17 13:44:34 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/10/22 17:44:53 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	ft_delete_node(t_list *lst, void (*del)(void *))
 	free(lst);
 }
 
-t_list *pop_head_from_list(t_linked_list *lst)
+t_list	*pop_head_from_list(t_linked_list *lst)
 {
 	t_list	*popped_node;
 

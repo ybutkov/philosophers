@@ -6,7 +6,7 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/16 13:52:20 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/18 19:18:45 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/10/22 20:07:50 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ typedef struct s_event_queue
 
 typedef struct s_dispatcher_data
 {
-	// For main thread to control dispatcher
 	int				is_running;
 	int				number_of_philosophers;
 	int				time_to_die;

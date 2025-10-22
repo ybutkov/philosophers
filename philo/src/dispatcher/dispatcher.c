@@ -6,16 +6,15 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 13:12:22 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/19 19:46:30 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/10/22 20:14:58 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "event.h"
+#include "printer.h"
 #include "utils.h"
 #include <stdio.h>
 #include <unistd.h>
-
-void			print_event(t_event *event);
 
 static long int	*init_time_eatings(int number_of_philosophers,
 		int **already_eaten)
@@ -65,6 +64,19 @@ static int	check_death(t_dispatcher_data *dispatcher_data,
 	return (0);
 }
 
+int	prepare_inner_data_philos(int number_philos, long int **time_eatings,
+		int **already_eaten, int *is_someone_dead)
+{
+	*already_eaten = malloc(sizeof(int) * number_philos);
+	if (!already_eaten)
+		return (0);
+	*time_eatings = init_time_eatings(number_philos, already_eaten);
+	if (!time_eatings)
+		return (free(already_eaten), 0);
+	*is_someone_dead = 0;
+	return(1);
+}
+
 void	*dispatcher_routine(void *arg)
 {
 	t_event_queue		*event_queue;
@@ -76,13 +88,16 @@ void	*dispatcher_routine(void *arg)
 
 	dispatcher_data = (t_dispatcher_data *)arg;
 	event_queue = dispatcher_data->event_queue;
-	already_eaten = malloc(sizeof(int)
-			* dispatcher_data->number_of_philosophers);
-	if (!already_eaten)
+	if (prepare_inner_data_philos(dispatcher_data->number_of_philosophers,
+			&time_eatings, &already_eaten, &is_someone_dead) == 0)
 		return (NULL);
-	time_eatings = init_time_eatings(dispatcher_data->number_of_philosophers,
-			&already_eaten);
-	is_someone_dead = 0;
+	// already_eaten = malloc(sizeof(int)
+	// 		* dispatcher_data->number_of_philosophers);
+	// if (!already_eaten)
+	// 	return (NULL);
+	// time_eatings = init_time_eatings(dispatcher_data->number_of_philosophers,
+	// 		&already_eaten);
+	// is_someone_dead = 0;
 	while (is_someone_dead == 0)
 	{
 		// add logic to check for death
@@ -120,6 +135,6 @@ void	*dispatcher_routine(void *arg)
 	}
 	free(time_eatings);
 	free(already_eaten);
-	free(dispatcher_data);
+	// free(dispatcher_data);
 	return (NULL);
 }

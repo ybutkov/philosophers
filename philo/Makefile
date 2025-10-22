@@ -16,6 +16,7 @@ C_PHILO_FILES = \
 	printer/printer.c \
 	event/event.c \
 	event/event_op.c \
+	event/event_queue.c \
 	dispatcher/dispatcher.c \
 	dispatcher/create_dispatcher_data.c \
 	philos/philosopher.c \
@@ -71,8 +72,10 @@ t : re
 
 v : re
 	valgrind --leak-check=full --show-leak-kinds=all \
-	--tool=memcheck --errors-for-leak-kinds=all -s ./$(NAME) 1 180 60 60 5
+	--tool=memcheck --errors-for-leak-kinds=all -s ./$(NAME)  1 180 60 60 5
+h : re
+	valgrind --tool=helgrind --history-level=full --num-callers=30 ./$(NAME) 1 180 60 60 5
 
 .PHONY : all clean fclean re bonus
 
-#valgrind --leak-check=full --show-leak-kinds=all --errors-for-leak-kinds=all -s ./pipex "infiles/basic.txt" "nonexistingcommand" "cat -e" "outfiles/outfile"
+#valgrind --leak-check=full --show-leak-kinds=all --errors-for-leak-kinds=all -s ./
