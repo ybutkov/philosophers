@@ -6,7 +6,7 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 13:12:22 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/22 20:14:58 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/10/23 15:23:00 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,15 +37,15 @@ static long int	*init_time_eatings(int number_of_philosophers,
 	return (time_eatings);
 }
 
-static int	check_death(t_dispatcher_data *dispatcher_data,
-		long int *time_eatings, int *already_eaten, int is_someone_dead_already)
+static int	is_finish_table(t_dispatcher_data *dispatcher_data,
+		long int *time_eatings, int *already_eaten, int *is_finish)
 {
 	long int	border_time;
 	int			i;
 	int			eaten_count;
 
-	if (is_someone_dead_already)
-		return (1);
+	if (*is_finish)
+		return (*is_finish);
 	border_time = get_time_in_milliseconds() - dispatcher_data->time_to_die;
 	i = 0;
 	eaten_count = 0;
@@ -54,18 +54,19 @@ static int	check_death(t_dispatcher_data *dispatcher_data,
 		if (!already_eaten[i] && time_eatings[i] < border_time)
 		{
 			printf("%ld %d died\n", get_time_in_milliseconds(), i + 1);
-			return (1);
+			*is_finish = 1;
+			return (*is_finish);
 		}
 		eaten_count += already_eaten[i];
 		i++;
 	}
 	if (eaten_count == dispatcher_data->number_of_philosophers)
-		return (1);
-	return (0);
+		*is_finish = 1;
+	return (*is_finish);
 }
 
-int	prepare_inner_data_philos(int number_philos, long int **time_eatings,
-		int **already_eaten, int *is_someone_dead)
+static int	prepare_inner_data_philos(int number_philos,
+		long int **time_eatings, int **already_eaten, int *is_someone_dead)
 {
 	*already_eaten = malloc(sizeof(int) * number_philos);
 	if (!already_eaten)
@@ -74,67 +75,57 @@ int	prepare_inner_data_philos(int number_philos, long int **time_eatings,
 	if (!time_eatings)
 		return (free(already_eaten), 0);
 	*is_someone_dead = 0;
-	return(1);
+	return (1);
+}
+
+static void	handle_events(t_dispatcher_data *dispatcher_data,
+		int *already_eaten, long int *time_eatings, int *is_finish)
+{
+	t_event_queue	*event_queue;
+	t_event			*event;
+
+	event_queue = dispatcher_data->event_queue;
+	while (event_queue->events->get_size(event_queue->events) > 0)
+	{
+		event_queue = dispatcher_data->event_queue;
+		event = event_queue->pop_event(event_queue);
+		if (event->event_type == EVENT_TYPE_FULLY_EATEN)
+			already_eaten[event->philo_id - 1] = 1;
+		else
+			print_event(event);
+		if (event->event_type == EVENT_TYPE_EATING)
+			time_eatings[event->philo_id - 1] = event->timestamp;
+		free(event);
+		if (is_finish_table(dispatcher_data, time_eatings, already_eaten,
+				is_finish))
+		{
+			event_queue->mark_someone_dead(event_queue);
+			break ;
+		}
+	}
 }
 
 void	*dispatcher_routine(void *arg)
 {
-	t_event_queue		*event_queue;
 	t_dispatcher_data	*dispatcher_data;
-	t_event				*event;
 	long int			*time_eatings;
 	int					*already_eaten;
-	int					is_someone_dead;
+	int					is_finish;
+	t_event_queue		*event_queue;
 
 	dispatcher_data = (t_dispatcher_data *)arg;
 	event_queue = dispatcher_data->event_queue;
 	if (prepare_inner_data_philos(dispatcher_data->number_of_philosophers,
-			&time_eatings, &already_eaten, &is_someone_dead) == 0)
+			&time_eatings, &already_eaten, &is_finish) == 0)
 		return (NULL);
-	// already_eaten = malloc(sizeof(int)
-	// 		* dispatcher_data->number_of_philosophers);
-	// if (!already_eaten)
-	// 	return (NULL);
-	// time_eatings = init_time_eatings(dispatcher_data->number_of_philosophers,
-	// 		&already_eaten);
-	// is_someone_dead = 0;
-	while (is_someone_dead == 0)
+	while (is_finish == 0)
 	{
-		// add logic to check for death
-		while (event_queue->events->get_size(event_queue->events) > 0)
-		{
-			is_someone_dead = check_death(dispatcher_data, time_eatings,
-					already_eaten, is_someone_dead);
-			if (is_someone_dead)
-			{
-				event_queue->mark_someone_dead(event_queue);
-				// need to print all remaining events before death event ???
-				break ;
-			}
-			event = event_queue->pop_event(event_queue);
-			if (event->event_type == EVENT_TYPE_FULLY_EATEN)
-				already_eaten[event->philo_id - 1] = 1;
-			else
-				print_event(event);
-			is_someone_dead = check_death(dispatcher_data, time_eatings,
-					already_eaten, is_someone_dead);
-			if (is_someone_dead)
-			{
-				event_queue->mark_someone_dead(event_queue);
-				// need to print all remaining events before death event ???
-				break ;
-			}
-			if (event->event_type == EVENT_TYPE_EATING)
-				time_eatings[event->philo_id - 1] = event->timestamp;
-			free(event);
-		}
-		is_someone_dead = check_death(dispatcher_data, time_eatings,
-				already_eaten, is_someone_dead);
-		if (is_someone_dead)
+		handle_events(dispatcher_data, already_eaten, time_eatings, &is_finish);
+		if (is_finish_table(dispatcher_data, time_eatings, already_eaten,
+				&is_finish))
 			event_queue->mark_someone_dead(event_queue);
 	}
 	free(time_eatings);
 	free(already_eaten);
-	// free(dispatcher_data);
 	return (NULL);
 }

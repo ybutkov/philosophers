@@ -17,17 +17,16 @@ C_PHILO_FILES = \
 	event/event.c \
 	event/event_op.c \
 	event/event_queue.c \
-	dispatcher/dispatcher.c \
+	dispatcher/dispatcher_routine.c \
 	dispatcher/create_dispatcher_data.c \
 	philos/philosopher.c \
+	philos/philosopher_routine.c \
 	philos/philo_data.c \
+	philos/philo_init.c \
 	utils/time_func.c \
 	utils/compare_util.c \
 	utils/free_and_set_null.c \
 	utils/ft_atoi.c \
-	structures/base_stack/stack_base_basic.c \
-	structures/base_stack/stack_base_core.c \
-	structures/base_stack/stack_base_operations.c \
 	structures/linked_list/create_linked_list.c \
 	structures/linked_list/ft_add_back.c \
 	structures/linked_list/ft_add_front.c \
