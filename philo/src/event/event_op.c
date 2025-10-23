@@ -6,11 +6,12 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 13:39:10 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/22 17:44:39 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/10/23 16:29:09 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "event.h"
+#include <stdlib.h>
 
 void	push_event(t_event_queue *queue, t_event *event)
 {

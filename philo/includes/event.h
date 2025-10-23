@@ -6,7 +6,7 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/16 13:52:20 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/22 20:07:50 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/10/23 16:27:29 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define EVENT_H
 
 # include "linked_list.h"
-# include "structure.h"
 # include <pthread.h>
 # include <sys/types.h>
 

@@ -6,11 +6,12 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/18 13:41:11 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/18 13:43:25 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/10/23 16:29:23 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "event.h"
+#include <stdlib.h>
 
 t_dispatcher_data	*create_dispatcher_data(int number_of_philosophers,
 						int time_to_die, t_event_queue *event_queue)
