@@ -6,7 +6,7 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/16 13:44:07 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/23 16:19:29 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/10/24 20:21:38 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ static int	create_threads(t_event_queue *event_queue, t_philo_data *data)
 	if (!dispatcher_data)
 		return (0);
 	pthread_create(data->dispatcher, NULL, dispatcher_routine, dispatcher_data);
-	usleep(500);
+	// usleep(50);
 	philos = create_philos(data, event_queue, forks);
 	i = 0;
 	pthread_join(*data->dispatcher, NULL);

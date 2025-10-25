@@ -1,20 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   printer.h                                          :+:      :+:    :+:   */
+/*   ft_memmove.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/16 13:47:40 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/24 20:17:41 by ybutkov          ###   ########.fr       */
+/*   Created: 2025/07/04 12:12:33 by ybutkov           #+#    #+#             */
+/*   Updated: 2025/10/24 14:21:57 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PRINTER_H
-# define PRINTER_H
+#include <stdlib.h>
 
-# include "event.h"
+void	*ft_memmove(void *dst, const void *src, size_t len)
+{
+	unsigned char		*dest;
+	const unsigned char	*source;
 
-void	print_event(t_event *event, long int start_time);
-
-#endif
+	if (dst == NULL && src == NULL)
+		return (NULL);
+	dest = dst;
+	source = src;
+	if (src - dst > 0)
+		while (len--)
+			*dest++ = *source++;
+	else
+		while (len--)
+			dest[len] = source[len];
+	return (dst);
+}

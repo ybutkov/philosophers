@@ -6,7 +6,7 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/16 13:52:20 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/23 16:27:29 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/10/24 20:16:12 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ typedef struct s_dispatcher_data
 	int				is_running;
 	int				number_of_philosophers;
 	int				time_to_die;
+	long int		start_time;
 	t_event_queue	*event_queue;
 }					t_dispatcher_data;
 

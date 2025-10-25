@@ -1,20 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   printer.h                                          :+:      :+:    :+:   */
+/*   hash_code.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/16 13:47:40 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/24 20:17:41 by ybutkov          ###   ########.fr       */
+/*   Created: 2025/09/13 18:43:52 by ybutkov           #+#    #+#             */
+/*   Updated: 2025/09/13 19:17:49 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PRINTER_H
-# define PRINTER_H
+unsigned int	hash(char *key)
+{
+	unsigned int	hash;
+	int				c;
 
-# include "event.h"
-
-void	print_event(t_event *event, long int start_time);
-
-#endif
+	hash = 5381;
+	c = *key++;
+	while (c)
+	{
+		hash = ((hash << 5) + hash) + c;
+		c = *key++;
+	}
+	return (hash);
+}

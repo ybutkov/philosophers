@@ -1,5 +1,5 @@
-NAME = philo
-NAME_C = philo.c
+NAME = philo_bonus
+NAME_C = philo_bonus.c
 
 SRC = src
 BUILD_DIR =	build
@@ -14,27 +14,14 @@ CFLAGS = -Wall -Wextra -Werror -g -O0 $(INCLUDES)
 
 C_PHILO_FILES = \
 	printer/printer.c \
-	event/event.c \
-	event/event_op.c \
-	event/event_queue.c \
-	dispatcher/dispatcher_routine.c \
-	dispatcher/create_dispatcher_data.c \
-	philos/philosopher.c \
-	philos/philosopher_routine.c \
 	philos/philo_data.c \
-	philos/philo_init.c \
 	utils/time_func.c \
 	utils/compare_util.c \
 	utils/free_and_set_null.c \
 	utils/ft_atoi.c \
-	structures/linked_list/create_linked_list.c \
-	structures/linked_list/ft_add_back.c \
-	structures/linked_list/ft_add_front.c \
-	structures/linked_list/ft_lst_iter.c \
-	structures/linked_list/ft_insert.c \
-	structures/linked_list/ft_lst_clear.c \
-	structures/linked_list/ft_delete_node.c \
-	structures/linked_list/ft_lst_new.c
+	utils/ft_itoa.c \
+	utils/ft_strlen.c \
+	utils/ft_memmove.c
 
 
 
@@ -78,4 +65,3 @@ h : re
 .PHONY : all clean fclean re bonus
 
 #valgrind --leak-check=full --show-leak-kinds=all --errors-for-leak-kinds=all -s ./
-# python3 src/__main__.py /home/ybutkov/Documents/Curriculum/philosophers/philo

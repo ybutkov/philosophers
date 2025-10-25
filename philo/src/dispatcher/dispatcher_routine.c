@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   dispatcher.c                                       :+:      :+:    :+:   */
+/*   dispatcher_routine.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 13:12:22 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/23 15:23:00 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/10/24 20:22:48 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,8 @@ static int	is_finish_table(t_dispatcher_data *dispatcher_data,
 	{
 		if (!already_eaten[i] && time_eatings[i] < border_time)
 		{
-			printf("%ld %d died\n", get_time_in_milliseconds(), i + 1);
+			printf("%ld %d died\n", get_time_in_milliseconds()
+				- dispatcher_data->start_time, i + 1);
 			*is_finish = 1;
 			return (*is_finish);
 		}
@@ -92,7 +93,7 @@ static void	handle_events(t_dispatcher_data *dispatcher_data,
 		if (event->event_type == EVENT_TYPE_FULLY_EATEN)
 			already_eaten[event->philo_id - 1] = 1;
 		else
-			print_event(event);
+			print_event(event, dispatcher_data->start_time);
 		if (event->event_type == EVENT_TYPE_EATING)
 			time_eatings[event->philo_id - 1] = event->timestamp;
 		free(event);

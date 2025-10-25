@@ -1,20 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   printer.h                                          :+:      :+:    :+:   */
+/*   compare_util.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/16 13:47:40 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/24 20:17:41 by ybutkov          ###   ########.fr       */
+/*   Created: 2025/09/08 13:58:36 by ybutkov           #+#    #+#             */
+/*   Updated: 2025/10/19 16:09:01 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PRINTER_H
-# define PRINTER_H
+#include "utils.h"
 
-# include "event.h"
+int	between(long long value, long long left, long long right)
+{
+	if (value >= left && value <= right)
+		return (1);
+	return (0);
+}
 
-void	print_event(t_event *event, long int start_time);
+int	in_set(char ch, char *set)
+{
+	while (*set)
+	{
+		if (ch == *set)
+			return (1);
+		set = set + 1;
+	}
+	return (0);
+}
 
-#endif
+long int	ft_max(long int a, long int b)
+{
+	if (a > b)
+		return (a);
+	return (b);
+}

@@ -1,20 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   printer.h                                          :+:      :+:    :+:   */
+/*   time_func.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/16 13:47:40 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/24 20:17:41 by ybutkov          ###   ########.fr       */
+/*   Created: 2025/09/26 14:13:48 by ybutkov           #+#    #+#             */
+/*   Updated: 2025/09/26 14:23:54 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PRINTER_H
-# define PRINTER_H
+#include <sys/time.h>
+#include <time.h>
 
-# include "event.h"
+long int	get_time_in_milliseconds(void)
+{
+	struct timeval	tv;
+	long int		milliseconds;
 
-void	print_event(t_event *event, long int start_time);
-
-#endif
+	gettimeofday(&tv, NULL);
+	milliseconds = (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
+	return (milliseconds);
+}

@@ -1,20 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   printer.h                                          :+:      :+:    :+:   */
+/*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/16 13:47:40 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/24 20:17:41 by ybutkov          ###   ########.fr       */
+/*   Created: 2025/07/03 14:52:38 by ybutkov           #+#    #+#             */
+/*   Updated: 2025/10/24 14:27:12 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PRINTER_H
-# define PRINTER_H
+#include <stddef.h>
 
-# include "event.h"
+size_t	ft_strlen(const char *s)
+{
+	size_t	length;
 
-void	print_event(t_event *event, long int start_time);
-
-#endif
+	length = 0;
+	while (s[length])
+		length++;
+	return (length);
+}
