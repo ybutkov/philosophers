@@ -15,13 +15,15 @@ CFLAGS = -Wall -Wextra -Werror -g -O0 $(INCLUDES)
 C_PHILO_FILES = \
 	printer/printer.c \
 	philos/philo_data.c \
+	get_next_line/get_next_line.c \
 	utils/time_func.c \
 	utils/compare_util.c \
 	utils/free_and_set_null.c \
 	utils/ft_atoi.c \
 	utils/ft_itoa.c \
 	utils/ft_strlen.c \
-	utils/ft_memmove.c
+	utils/ft_memmove.c \
+	utils/ft_memset.c
 
 
 

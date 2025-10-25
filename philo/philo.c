@@ -6,7 +6,7 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/16 13:44:07 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/24 20:21:38 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/10/25 14:35:31 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static int	check_arguments_are_digits(int argc, char const *argv[])
 	i = 1;
 	while (i < argc)
 	{
-		j = 0;
+		j = 1;
 		while (argv[i][j])
 		{
 			if (argv[i][j] < '0' || argv[i][j] > '9')
