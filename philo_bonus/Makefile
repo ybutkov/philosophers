@@ -15,6 +15,9 @@ CFLAGS = -Wall -Wextra -Werror -g -O0 $(INCLUDES)
 C_PHILO_FILES = \
 	printer/printer.c \
 	philos/philo_data.c \
+	philos/philo.c \
+	philos/philo_op.c \
+	philos/philosopher.c \
 	get_next_line/get_next_line.c \
 	utils/time_func.c \
 	utils/compare_util.c \
@@ -57,13 +60,20 @@ $(BUILD_DIR)/%.o : %.c
 
 t : re
 	./$(NAME) 5 50 20 20 4
+1 : re
+	./$(NAME) 4 310 200 100
+2 : re
+	./$(NAME) 5 800 200 200 3
+3 : re
+	./$(NAME) 5 800 200 200
 
 v : re
 	valgrind --leak-check=full --show-leak-kinds=all \
-	--tool=memcheck --errors-for-leak-kinds=all -s ./$(NAME)  1 180 60 60 5
+	--tool=memcheck --errors-for-leak-kinds=all -s ./$(NAME)  4 310 200 100
 h : re
-	valgrind --tool=helgrind --history-level=full --num-callers=30 ./$(NAME) 1 180 60 60 5
+	valgrind --tool=helgrind --history-level=full --num-callers=30 -s ./$(NAME) 4 310 200 100
 
 .PHONY : all clean fclean re bonus
 
 #valgrind --leak-check=full --show-leak-kinds=all --errors-for-leak-kinds=all -s ./
+# python3 src/__main__.py /home/ybutkov/Documents/Curriculum/philosophers/philo_bonus

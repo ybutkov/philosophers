@@ -68,6 +68,7 @@ $(BUILD_DIR)/%.o : %.c
 
 t : re
 	./$(NAME) 5 50 20 20 4
+# 	 198 610 200 200 10
 
 v : re
 	valgrind --leak-check=full --show-leak-kinds=all \
