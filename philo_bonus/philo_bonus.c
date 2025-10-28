@@ -6,11 +6,10 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/23 19:13:30 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/28 17:38:32 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/10/28 19:00:42 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
 #include "philo.h"
 #include "printer.h"
 #include "utils.h"
@@ -24,75 +23,59 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-static int	check_arguments_are_digits(int argc, char *argv[])
-{
-	int	i;
-	int	j;
+// static int	check_arguments_are_digits(int argc, char *argv[])
+// {
+// 	int	i;
+// 	int	j;
 
-	i = 1;
-	while (i < argc)
-	{
-		j = 0;
-		while (argv[i][j])
-		{
-			if (argv[i][j] < '0' || argv[i][j] > '9')
-				return (0);
-			j++;
-		}
-		i++;
-	}
-	return (1);
-}
+// 	i = 1;
+// 	while (i < argc)
+// 	{
+// 		j = 0;
+// 		while (argv[i][j])
+// 		{
+// 			if (argv[i][j] < '0' || argv[i][j] > '9')
+// 				return (0);
+// 			j++;
+// 		}
+// 		i++;
+// 	}
+// 	return (1);
+// }
 
-t_philo_data	*check_philo_data(t_philo_data *data)
-{
-	if (data->number_of_philosophers <= 0 || data->time_to_die <= 0
-		|| data->time_to_eat <= 0 || data->time_to_sleep <= 0)
-	{
-		return (free(data), NULL);
-	}
-	if (data->number_each_philosopher_must_eat == 0)
-		return (free(data), NULL);
-	data->forks = sem_open(SEM_FORK_BASE, O_CREAT, 0644,
-			data->number_of_philosophers);
-	if (data->forks == SEM_FAILED)
-		return (free(data), NULL);
-	data->print_semaphore = sem_open(SEM_PRINT_NAME, O_CREAT, 0644, 1);
-	if (data->print_semaphore == SEM_FAILED)
-	{
-		sem_close(data->forks);
-		sem_unlink(SEM_FORK_BASE);
-		return (free(data), NULL);
-	}
-	data->ready_to_eat_sem = sem_open(SEM_READY_EAT, O_CREAT, 0644,
-			data->number_of_philosophers / 2);
-	if (data->ready_to_eat_sem == SEM_FAILED)
-	{
-		sem_close(data->forks);
-		sem_unlink(SEM_FORK_BASE);
-		sem_close(data->print_semaphore);
-		sem_unlink(SEM_PRINT_NAME);
-		return (free(data), NULL);
-	}
-	return (data);
-}
+// t_philo_data	*check_philo_data(t_philo_data *data)
+// {
+// 	if (data->number_of_philosophers <= 0 || data->time_to_die <= 0
+// 		|| data->time_to_eat <= 0 || data->time_to_sleep <= 0
+// 		|| data->number_each_philosopher_must_eat == 0)
+// 		return (data->free(data), NULL);
+// 	data->forks = sem_open(SEM_FORK_BASE, O_CREAT, 0644,
+// 			data->number_of_philosophers);
+// 	data->print_semaphore = sem_open(SEM_PRINT_NAME, O_CREAT, 0644, 1);
+// 	data->ready_to_eat_sem = sem_open(SEM_READY_EAT, O_CREAT, 0644,
+// 			data->number_of_philosophers / 2);
+// 	if (data->forks == SEM_FAILED || data->print_semaphore == SEM_FAILED
+// 		|| data->ready_to_eat_sem == SEM_FAILED)
+// 		return (data->free(data), NULL);
+// 	return (data);
+// }
 
-static t_philo_data	*parse_arguments(int argc, char *argv[])
-{
-	t_philo_data	*data;
+// static t_philo_data	*parse_arguments(int argc, char *argv[])
+// {
+// 	t_philo_data	*data;
 
-	if (argc < 5 || argc > 6)
-		return (NULL);
-	if (!check_arguments_are_digits(argc - 1, &argv[1]))
-		return (NULL);
-	data = create_philo_data(ft_atoi(argv[1]), ft_atoi(argv[2]),
-			ft_atoi(argv[3]), ft_atoi(argv[4]));
-	if (argc == 6)
-		data->number_each_philosopher_must_eat = ft_atoi(argv[5]);
-	else
-		data->number_each_philosopher_must_eat = -1;
-	return (check_philo_data(data));
-}
+// 	if (argc < 5 || argc > 6)
+// 		return (NULL);
+// 	if (!check_arguments_are_digits(argc - 1, &argv[1]))
+// 		return (NULL);
+// 	data = create_philo_data(ft_atoi(argv[1]), ft_atoi(argv[2]),
+// 			ft_atoi(argv[3]), ft_atoi(argv[4]));
+// 	if (argc == 6)
+// 		data->number_each_philosopher_must_eat = ft_atoi(argv[5]);
+// 	else
+// 		data->number_each_philosopher_must_eat = -1;
+// 	return (check_philo_data(data));
+// }
 
 int	get_index_pid(pid_t *pids, int size, pid_t pid)
 {
@@ -157,7 +140,7 @@ int	main(int argc, char **argv)
 	int				i;
 	t_philo_data	*philo_data;
 
-	philo_data = parse_arguments(argc, argv);
+	philo_data = parse_arguments_to_philo_data(argc, argv);
 	if (!philo_data)
 		error_message_and_exit(ERROR_INVALID_ARGUMENTS);
 	i = 0;

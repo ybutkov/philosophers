@@ -18,7 +18,7 @@ C_PHILO_FILES = \
 	philos/philo.c \
 	philos/philo_op.c \
 	philos/philosopher.c \
-	get_next_line/get_next_line.c \
+	parcer/parcer.c \
 	utils/time_func.c \
 	utils/compare_util.c \
 	utils/free_and_set_null.c \
@@ -69,9 +69,9 @@ t : re
 
 v : re
 	valgrind --leak-check=full --show-leak-kinds=all \
-	--tool=memcheck --errors-for-leak-kinds=all -s ./$(NAME)  4 310 200 100
+	--tool=memcheck --errors-for-leak-kinds=all -s ./$(NAME)  14 310 200 100
 h : re
-	valgrind --tool=helgrind --history-level=full --num-callers=30 -s ./$(NAME) 4 310 200 100
+	valgrind --tool=helgrind --history-level=full --num-callers=30 -s ./$(NAME) 14 310 200 100
 
 .PHONY : all clean fclean re bonus
 

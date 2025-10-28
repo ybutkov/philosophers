@@ -6,7 +6,7 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 14:12:26 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/28 16:10:02 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/10/28 19:01:05 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ typedef struct s_philo
 	void		(*free)(struct s_philo *philo);
 }				t_philo;
 
+t_philo_data	*parse_arguments_to_philo_data(int argc, char *argv[]);
 t_philo_data	*create_philo_data(int number_of_philosophers, int time_to_die,
 					int time_to_eat, int time_to_sleep);
 t_philo			*create_philo(t_philo_data *philo_data, int id);

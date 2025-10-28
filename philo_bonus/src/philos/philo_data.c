@@ -6,7 +6,7 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/19 13:52:32 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/28 13:58:41 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/10/28 18:49:45 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,14 @@ t_philo_data	*create_philo_data(int number_of_philosophers,
 	data->time_to_die = time_to_die;
 	data->time_to_eat = time_to_eat;
 	data->time_to_sleep = time_to_sleep;
+	data->number_each_philosopher_must_eat = -1;
+	data->forks = NULL;
+	data->print_semaphore = NULL;
+	data->ready_to_eat_sem = NULL;
+	data->start_time = get_time_in_milliseconds();
 	sem_unlink(SEM_FORK_BASE);
 	sem_unlink(SEM_PRINT_NAME);
 	sem_unlink(SEM_READY_EAT);
-	data->start_time = get_time_in_milliseconds();
 	data->free = free_philo_data;
 	return (data);
 }

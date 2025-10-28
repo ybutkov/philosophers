@@ -6,7 +6,7 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 14:08:36 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/28 17:27:06 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/10/28 19:19:28 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,13 @@ static void	*life_checker(void *arg)
 		if (current_time - last_meal_time >= (long int)philo->time_to_die)
 		{
 			philo->free(philo);
-			exit(1);
+			/*
+			 * Use _exit to avoid stdio flush races with other threads still
+			 * printing. This prevents Helgrind data race reports on printf/flush.
+			 */
+			_exit(1);
 		}
-		usleep(100);
+		usleep(1000);
 	}
 }
 
@@ -44,7 +48,7 @@ static void	sleep_untill_time_ms(long int target_time)
 		current_time = get_time_in_milliseconds();
 		if (current_time >= target_time)
 			break ;
-		usleep(100);
+		usleep(1000);
 	}
 }
 
@@ -98,5 +102,6 @@ void	philosopher_action(t_philo_data *philo_data, int id)
 		wait_until_eat_time(philo);
 	}
 	philo->free(philo);
-	exit(0);
+	/* See note above: prefer _exit to avoid stdio flush in multi-threaded exit */
+	_exit(0);
 }

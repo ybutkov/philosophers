@@ -6,7 +6,7 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 13:53:57 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/23 15:36:18 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/10/28 19:19:56 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	sleep_untill_time_ms(t_event_queue *event_queue,
 		current_time = get_time_in_milliseconds();
 		if (current_time >= target_time)
 			break ;
-		usleep(100);
+		usleep(1000);
 	}
 }
 
