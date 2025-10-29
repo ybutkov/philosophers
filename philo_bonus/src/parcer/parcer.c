@@ -6,7 +6,7 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 18:57:41 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/28 19:02:42 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/10/29 12:17:12 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,9 @@ static t_philo_data	*check_and_init_philo_data(t_philo_data *data)
 	data->print_semaphore = sem_open(SEM_PRINT_NAME, O_CREAT, 0644, 1);
 	data->ready_to_eat_sem = sem_open(SEM_READY_EAT, O_CREAT, 0644,
 			data->number_of_philosophers / 2);
+	data->dead_sem = sem_open(SEM_SOMEONE_DEAD, O_CREAT, 0644, 0);
 	if (data->forks == SEM_FAILED || data->print_semaphore == SEM_FAILED
-		|| data->ready_to_eat_sem == SEM_FAILED)
+		|| data->ready_to_eat_sem == SEM_FAILED || data->dead_sem == SEM_FAILED)
 		return (data->free(data), NULL);
 	return (data);
 }

@@ -6,7 +6,7 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/19 13:52:32 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/28 18:49:45 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/10/29 12:12:46 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,9 @@ static void	free_philo_data(t_philo_data *philo_data)
 		&& philo_data->ready_to_eat_sem)
 		sem_close(philo_data->ready_to_eat_sem);
 	sem_unlink(SEM_READY_EAT);
+	if (philo_data->dead_sem != SEM_FAILED && philo_data->dead_sem)
+		sem_close(philo_data->dead_sem);
+	sem_unlink(SEM_SOMEONE_DEAD);
 	free(philo_data);
 }
 
@@ -51,6 +54,7 @@ t_philo_data	*create_philo_data(int number_of_philosophers,
 	sem_unlink(SEM_FORK_BASE);
 	sem_unlink(SEM_PRINT_NAME);
 	sem_unlink(SEM_READY_EAT);
+	sem_unlink(SEM_SOMEONE_DEAD);
 	data->free = free_philo_data;
 	return (data);
 }

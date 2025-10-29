@@ -6,7 +6,7 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 14:08:36 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/28 19:19:28 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/10/29 19:14:14 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,19 +24,26 @@ static void	*life_checker(void *arg)
 	philo = (t_philo *)arg;
 	while (1)
 	{
-		last_meal_time = philo->get_last_meal_time(philo);
 		current_time = get_time_in_milliseconds();
+		last_meal_time = philo->get_last_meal_time(philo);
 		if (current_time - last_meal_time >= (long int)philo->time_to_die)
 		{
 			philo->free(philo);
-			/*
-			 * Use _exit to avoid stdio flush races with other threads still
-			 * printing. This prevents Helgrind data race reports on printf/flush.
-			 */
 			_exit(1);
 		}
 		usleep(1000);
 	}
+}
+
+static void	*dead_checker(void *arg)
+{
+	t_philo		*philo;
+
+	philo = (t_philo *)arg;
+	sem_wait(philo->dead_sem);
+	philo->free(philo);
+	sem_post(philo->dead_sem);
+	exit(0);
 }
 
 static void	sleep_untill_time_ms(long int target_time)
@@ -68,12 +75,23 @@ static void	wait_until_eat_time(t_philo *philo)
 	sleep_untill_time_ms(target_time);
 }
 
-static void	run_life_checker_thread(t_philo *philo)
+static int	run_checkers_threads(t_philo *philo)
 {
-	pthread_t	thread;
+	pthread_t	life_thread;
+	pthread_t	dead_thread;
 
-	pthread_create(&thread, NULL, life_checker, philo);
-	pthread_detach(thread);
+	if (pthread_create(&life_thread, NULL, life_checker, philo) != 0)
+		return (0);
+	if (pthread_create(&dead_thread, NULL, dead_checker, philo) != 0)
+	{
+		pthread_detach(life_thread);
+		philo->set_last_meal_time(philo, 0);
+		usleep(10000);
+		return (0);
+	}
+	pthread_detach(life_thread);
+	pthread_detach(dead_thread);
+	return (1);
 }
 
 void	philosopher_action(t_philo_data *philo_data, int id)
@@ -84,9 +102,16 @@ void	philosopher_action(t_philo_data *philo_data, int id)
 	t_philo		*philo;
 
 	philo = create_philo(philo_data, id);
-	run_life_checker_thread(philo);
+	if (run_checkers_threads(philo) == 0)
+	{
+		philo->free(philo);
+		exit(2);
+	}
 	eat_count = philo->must_eat_times;
 	print_event(philo, EVENT_TYPE_THINKING);
+	// too long sleep ???
+	sleep_untill_time_ms(philo->last_meal_time + 2 * id);
+	//
 	while (eat_count)
 	{
 		philo->take_forks(philo);
@@ -102,6 +127,5 @@ void	philosopher_action(t_philo_data *philo_data, int id)
 		wait_until_eat_time(philo);
 	}
 	philo->free(philo);
-	/* See note above: prefer _exit to avoid stdio flush in multi-threaded exit */
-	_exit(0);
+	exit(0);
 }

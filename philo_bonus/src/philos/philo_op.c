@@ -6,7 +6,7 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 17:29:13 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/28 17:34:33 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/10/29 12:15:09 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	set_up_initial_values(t_philo *philo, t_philo_data *philo_data,
 	philo->start_time = philo_data->start_time;
 	philo->forks = philo_data->forks;
 	philo->ready_to_eat_sem = philo_data->ready_to_eat_sem;
+	philo->dead_sem = philo_data->dead_sem;
 }
 
 void	free_philo(t_philo *philo)

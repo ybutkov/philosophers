@@ -6,7 +6,7 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/23 19:13:30 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/28 19:00:42 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/10/29 19:26:35 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,13 +115,19 @@ void	watch_dog(pid_t *pids, t_philo_data *philo_data)
 	while (i < philo_data->number_of_philosophers)
 	{
 		pid = waitpid(-1, &status, 0);
-		if (WIFEXITED(status) && WEXITSTATUS(status) == 1)
+		if (WIFEXITED(status) && (WEXITSTATUS(status) == 1
+				|| WEXITSTATUS(status) == 2))
 		{
 			philo_index = get_index_pid(pids,
 					philo_data->number_of_philosophers, pid);
-			philo.id = philo_index;
-			print_event(&philo, EVENT_TYPE_DIED);
-			kill_them_all(pids, philo_data->number_of_philosophers);
+			philo.id = philo_index + 1;
+			while (i++ < philo_data->number_of_philosophers)
+				sem_post(philo_data->dead_sem);
+			if (WEXITSTATUS(status) == 1)
+				print_event(&philo, EVENT_TYPE_DIED);
+			else
+				printf("%s\n", ERROR_THREAD_FAILED);
+			sem_wait(philo_data->print_semaphore);
 			break ;
 		}
 		i++;
@@ -148,7 +154,7 @@ int	main(int argc, char **argv)
 	{
 		pids[i] = fork();
 		if (pids[i] == 0)
-			philosopher_action(philo_data, i);
+			philosopher_action(philo_data, i + 1);
 		else if (pids[i] < 0)
 		{
 			kill_them_all(pids, philo_data->number_of_philosophers);

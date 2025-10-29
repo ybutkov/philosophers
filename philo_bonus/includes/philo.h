@@ -6,7 +6,7 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 14:12:26 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/28 19:01:05 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/10/29 19:23:22 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,10 @@
 # define SEM_MUST_EAT_BASE "/philo_must_eat_"
 # define SEM_MUST_EAT_BASE_LEN 16
 # define SEM_READY_EAT "/philo_ready_to_eat"
+# define SEM_SOMEONE_DEAD "/philo_dead_sem"
 
 # define ERROR_FORK_FAILED "Error: Fork failed"
+# define ERROR_THREAD_FAILED "Error: Thread creation failed"
 # define ERROR_INVALID_ARGUMENTS "Error: Invalid arguments"
 
 typedef enum e_event_type
@@ -52,6 +54,7 @@ typedef struct s_philo_data
 	sem_t		*forks;
 	sem_t		*ready_to_eat_sem;
 	sem_t		*print_semaphore;
+	sem_t		*dead_sem;
 
 	void		(*free)(struct s_philo_data *data);
 }				t_philo_data;
@@ -70,6 +73,7 @@ typedef struct s_philo
 	sem_t		*print_semaphore;
 	sem_t		*forks;
 	sem_t		*ready_to_eat_sem;
+	sem_t		*dead_sem;
 
 	void		(*take_forks)(struct s_philo *philo);
 	void		(*put_forks_down)(struct s_philo *philo);

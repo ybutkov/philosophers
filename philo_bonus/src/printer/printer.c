@@ -6,7 +6,7 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/16 13:46:48 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/28 19:04:24 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/10/29 14:16:47 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,11 @@ long int	print_event(t_philo *philo, t_event_type event_type)
 {
 	long int	time;
 
-	time = get_time_in_milliseconds();
 	sem_wait(philo->print_semaphore);
+	time = get_time_in_milliseconds();
 	printf(get_event_string(event_type), time - philo->start_time, philo->id);
 	printf("\n");
+	fflush(stdout);
 	sem_post(philo->print_semaphore);
 	return (time);
 }
