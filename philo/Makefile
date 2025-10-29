@@ -66,6 +66,7 @@ $(BUILD_DIRS):
 $(BUILD_DIR)/%.o : %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
+# Add checking for all create, malloc, open and etc
 t : re
 	./$(NAME) 5 50 20 20 4
 # 	 198 610 200 200 10
