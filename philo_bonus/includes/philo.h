@@ -6,7 +6,7 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 14:12:26 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/29 19:23:22 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/10/31 16:55:00 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,19 @@
 # define TIME_PHILO_FORMAT_OUTPUT "%lu %d "
 # define SEM_MEAL_BASE "/philo_meal_"
 # define SEM_MEAL_BASE_LEN 12
-# define SEM_MUST_EAT_BASE "/philo_must_eat_"
-# define SEM_MUST_EAT_BASE_LEN 16
+# define SEM_PHILO_IS_DEAD_BASE "/philo_is_dead_"
+# define SEM_PHILO_IS_DEAD_BASE_LEN 15
 # define SEM_READY_EAT "/philo_ready_to_eat"
 # define SEM_SOMEONE_DEAD "/philo_dead_sem"
 
 # define ERROR_FORK_FAILED "Error: Fork failed"
-# define ERROR_THREAD_FAILED "Error: Thread creation failed"
+# define ERROR_THREAD_IN_FORK_FAILED "Error: Thread in fork creation failed"
 # define ERROR_INVALID_ARGUMENTS "Error: Invalid arguments"
+
+# define STATUS_ALL_ALIVE 0
+# define STATUS_SOMEONE_DIED 1
+# define STATUS_PHILO_DIED 2
+# define STATUS_THREAD_IN_FORK_FAILED 3
 
 typedef enum e_event_type
 {
@@ -66,8 +71,9 @@ typedef struct s_philo
 	long int	last_meal_time;
 	int			must_eat_times;
 	long int	start_time;
-	sem_t		*must_eat_times_sem;
-	char		*must_eat_times_sem_name;
+	sem_t		*is_dead_sem;
+	char		*is_dead_sem_name;
+	int			status_is_dead;
 	sem_t		*meal_sem;
 	char		*meal_sem_name;
 	sem_t		*print_semaphore;
@@ -79,6 +85,8 @@ typedef struct s_philo
 	void		(*put_forks_down)(struct s_philo *philo);
 	void		(*set_last_meal_time)(struct s_philo *philo, long int time);
 	long int	(*get_last_meal_time)(struct s_philo *philo);
+	void		(*set_is_dead)(struct s_philo *philo, int status_dead);
+	int			(*get_is_dead)(struct s_philo *philo);
 	void		(*free)(struct s_philo *philo);
 }				t_philo;
 

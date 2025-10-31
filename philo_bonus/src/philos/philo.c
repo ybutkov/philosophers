@@ -6,7 +6,7 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 15:20:08 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/28 17:35:42 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/10/31 19:32:48 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ static void	set_up_philo_functions(t_philo *philo)
 	philo->get_last_meal_time = get_last_meal_time;
 	philo->take_forks = philo_take_forks;
 	philo->put_forks_down = philo_put_forks_down;
+	philo->set_is_dead = set_philo_is_dead;
+	philo->get_is_dead = get_philo_is_dead;
 }
 
 t_philo	*create_philo(t_philo_data *philo_data, int id)
@@ -58,18 +60,18 @@ t_philo	*create_philo(t_philo_data *philo_data, int id)
 		return (NULL);
 	set_up_initial_values(philo, philo_data, id);
 	philo->meal_sem_name = build_sem_name(SEM_MEAL_BASE, SEM_MEAL_BASE_LEN, id);
-	philo->must_eat_times_sem_name = build_sem_name(SEM_MUST_EAT_BASE,
-			SEM_MUST_EAT_BASE_LEN, id);
-	if (!philo->meal_sem_name || !philo->must_eat_times_sem_name)
+	philo->is_dead_sem_name = build_sem_name(SEM_PHILO_IS_DEAD_BASE,
+			SEM_PHILO_IS_DEAD_BASE_LEN, id);
+	if (!philo->meal_sem_name || !philo->is_dead_sem_name)
 		return (free_philo(philo), NULL);
 	philo->meal_sem = sem_open(philo->meal_sem_name, O_CREAT, 0644, 1);
-	philo->must_eat_times_sem = sem_open(philo->must_eat_times_sem_name,
+	philo->is_dead_sem = sem_open(philo->is_dead_sem_name,
 			O_CREAT, 0644, 1);
 	if (philo->meal_sem == SEM_FAILED
-		|| philo->must_eat_times_sem == SEM_FAILED)
+		|| philo->is_dead_sem == SEM_FAILED)
 		return (free_philo(philo), NULL);
 	sem_unlink(philo->meal_sem_name);
-	sem_unlink(philo->must_eat_times_sem_name);
+	sem_unlink(philo->is_dead_sem_name);
 	set_up_philo_functions(philo);
 	return (philo);
 }

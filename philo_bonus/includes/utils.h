@@ -6,7 +6,7 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/08 13:59:35 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/25 14:56:13 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/10/31 16:18:10 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 # include <stdlib.h>
 
 long int		get_time_in_milliseconds(void);
+void			sleep_untill_time(long int target_time);
+void			error_message_and_exit(char *message, int status);
 int				between(long long value, long long left, long long right);
 int				in_set(char ch, char *set);
 long int		ft_max(long int a, long int b);

@@ -6,7 +6,7 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 17:29:13 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/29 12:15:09 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/10/31 16:25:45 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,7 @@
 #include <semaphore.h>
 #include <stdlib.h>
 
-void	set_up_initial_values(t_philo *philo, t_philo_data *philo_data,
-		int id)
+void	set_up_initial_values(t_philo *philo, t_philo_data *philo_data, int id)
 {
 	philo->id = id;
 	philo->last_meal_time = philo_data->start_time;
@@ -29,22 +28,27 @@ void	set_up_initial_values(t_philo *philo, t_philo_data *philo_data,
 	philo->forks = philo_data->forks;
 	philo->ready_to_eat_sem = philo_data->ready_to_eat_sem;
 	philo->dead_sem = philo_data->dead_sem;
+	philo->status_is_dead = STATUS_ALL_ALIVE;
 }
 
 void	free_philo(t_philo *philo)
 {
 	if (!philo)
 		return ;
-	if (philo->must_eat_times_sem != SEM_FAILED && philo->must_eat_times_sem)
-		sem_close(philo->must_eat_times_sem);
-	sem_unlink(philo->must_eat_times_sem_name);
+	if (philo->is_dead_sem != SEM_FAILED && philo->is_dead_sem)
+	{
+		sem_close(philo->is_dead_sem);
+		sem_unlink(philo->is_dead_sem_name);
+	}
 	if (philo->meal_sem != SEM_FAILED && philo->meal_sem)
+	{
 		sem_close(philo->meal_sem);
-	sem_unlink(philo->meal_sem_name);
+		sem_unlink(philo->meal_sem_name);
+	}
 	if (philo->meal_sem_name)
 		free(philo->meal_sem_name);
-	if (philo->must_eat_times_sem_name)
-		free(philo->must_eat_times_sem_name);
+	if (philo->is_dead_sem_name)
+		free(philo->is_dead_sem_name);
 	free(philo);
 }
 

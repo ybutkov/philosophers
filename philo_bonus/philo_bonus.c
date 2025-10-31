@@ -6,7 +6,7 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/23 19:13:30 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/29 19:26:35 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/10/31 17:11:41 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,61 +23,7 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-// static int	check_arguments_are_digits(int argc, char *argv[])
-// {
-// 	int	i;
-// 	int	j;
-
-// 	i = 1;
-// 	while (i < argc)
-// 	{
-// 		j = 0;
-// 		while (argv[i][j])
-// 		{
-// 			if (argv[i][j] < '0' || argv[i][j] > '9')
-// 				return (0);
-// 			j++;
-// 		}
-// 		i++;
-// 	}
-// 	return (1);
-// }
-
-// t_philo_data	*check_philo_data(t_philo_data *data)
-// {
-// 	if (data->number_of_philosophers <= 0 || data->time_to_die <= 0
-// 		|| data->time_to_eat <= 0 || data->time_to_sleep <= 0
-// 		|| data->number_each_philosopher_must_eat == 0)
-// 		return (data->free(data), NULL);
-// 	data->forks = sem_open(SEM_FORK_BASE, O_CREAT, 0644,
-// 			data->number_of_philosophers);
-// 	data->print_semaphore = sem_open(SEM_PRINT_NAME, O_CREAT, 0644, 1);
-// 	data->ready_to_eat_sem = sem_open(SEM_READY_EAT, O_CREAT, 0644,
-// 			data->number_of_philosophers / 2);
-// 	if (data->forks == SEM_FAILED || data->print_semaphore == SEM_FAILED
-// 		|| data->ready_to_eat_sem == SEM_FAILED)
-// 		return (data->free(data), NULL);
-// 	return (data);
-// }
-
-// static t_philo_data	*parse_arguments(int argc, char *argv[])
-// {
-// 	t_philo_data	*data;
-
-// 	if (argc < 5 || argc > 6)
-// 		return (NULL);
-// 	if (!check_arguments_are_digits(argc - 1, &argv[1]))
-// 		return (NULL);
-// 	data = create_philo_data(ft_atoi(argv[1]), ft_atoi(argv[2]),
-// 			ft_atoi(argv[3]), ft_atoi(argv[4]));
-// 	if (argc == 6)
-// 		data->number_each_philosopher_must_eat = ft_atoi(argv[5]);
-// 	else
-// 		data->number_each_philosopher_must_eat = -1;
-// 	return (check_philo_data(data));
-// }
-
-int	get_index_pid(pid_t *pids, int size, pid_t pid)
+static int	get_index_pid(pid_t *pids, int size, pid_t pid)
 {
 	int	i;
 
@@ -91,7 +37,7 @@ int	get_index_pid(pid_t *pids, int size, pid_t pid)
 	return (-1);
 }
 
-void	kill_them_all(pid_t *pids, int size)
+static void	kill_them_all(pid_t *pids, int size)
 {
 	int	i;
 
@@ -100,7 +46,28 @@ void	kill_them_all(pid_t *pids, int size)
 		kill(pids[i++], SIGKILL);
 }
 
-void	watch_dog(pid_t *pids, t_philo_data *philo_data)
+static void	someone_failed_or_died(pid_t *pids, t_philo_data *philo_data,
+		pid_t pid, int status)
+{
+	int		philo_index;
+	int		i;
+	t_philo	philo;
+
+	i = 0;
+	philo.print_semaphore = philo_data->print_semaphore;
+	philo.start_time = philo_data->start_time;
+	philo_index = get_index_pid(pids, philo_data->number_of_philosophers, pid);
+	philo.id = philo_index + 1;
+	while (i++ < philo_data->number_of_philosophers)
+		sem_post(philo_data->dead_sem);
+	if (WEXITSTATUS(status) == STATUS_PHILO_DIED)
+		print_event(&philo, EVENT_TYPE_DIED);
+	else
+		printf("%s\n", ERROR_THREAD_IN_FORK_FAILED);
+	sem_wait(philo_data->print_semaphore);
+}
+
+static void	watch_dog(pid_t *pids, t_philo_data *philo_data)
 {
 	pid_t	pid;
 	int		i;
@@ -115,29 +82,14 @@ void	watch_dog(pid_t *pids, t_philo_data *philo_data)
 	while (i < philo_data->number_of_philosophers)
 	{
 		pid = waitpid(-1, &status, 0);
-		if (WIFEXITED(status) && (WEXITSTATUS(status) == 1
-				|| WEXITSTATUS(status) == 2))
+		if (WIFEXITED(status) && (WEXITSTATUS(status) == STATUS_PHILO_DIED
+				|| WEXITSTATUS(status) == STATUS_THREAD_IN_FORK_FAILED))
 		{
-			philo_index = get_index_pid(pids,
-					philo_data->number_of_philosophers, pid);
-			philo.id = philo_index + 1;
-			while (i++ < philo_data->number_of_philosophers)
-				sem_post(philo_data->dead_sem);
-			if (WEXITSTATUS(status) == 1)
-				print_event(&philo, EVENT_TYPE_DIED);
-			else
-				printf("%s\n", ERROR_THREAD_FAILED);
-			sem_wait(philo_data->print_semaphore);
+			someone_failed_or_died(pids, philo_data, pid, status);
 			break ;
 		}
 		i++;
 	}
-}
-
-void	error_message_and_exit(char *message)
-{
-	printf("%s\n", message);
-	exit(1);
 }
 
 int	main(int argc, char **argv)
@@ -148,7 +100,7 @@ int	main(int argc, char **argv)
 
 	philo_data = parse_arguments_to_philo_data(argc, argv);
 	if (!philo_data)
-		error_message_and_exit(ERROR_INVALID_ARGUMENTS);
+		error_message_and_exit(ERROR_INVALID_ARGUMENTS, EXIT_FAILURE);
 	i = 0;
 	while (i < philo_data->number_of_philosophers)
 	{
@@ -159,7 +111,7 @@ int	main(int argc, char **argv)
 		{
 			kill_them_all(pids, philo_data->number_of_philosophers);
 			philo_data->free(philo_data);
-			error_message_and_exit(ERROR_FORK_FAILED);
+			error_message_and_exit(ERROR_FORK_FAILED, EXIT_FAILURE);
 		}
 		i++;
 	}

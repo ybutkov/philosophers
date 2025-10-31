@@ -6,7 +6,7 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/16 13:46:48 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/29 14:16:47 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/10/31 17:52:23 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,25 @@ char	*get_event_string(t_event_type event_type)
 		return ("Unknown event type");
 	return ((char *)event_strings[event_type]);
 }
+
+// char	*get_event_string(t_event_type event_type)
+// {
+// 	if (event_type == EVENT_TYPE_NONE)
+// 		return ("none");
+// 	else if (event_type == EVENT_TYPE_FORK_TAKEN)
+// 		return (TIME_PHILO_FORMAT_OUTPUT "has taken a fork");
+// 	else if (event_type == EVENT_TYPE_EATING)
+// 		return (TIME_PHILO_FORMAT_OUTPUT "is eating");
+// 	else if (event_type == EVENT_TYPE_SLEEPING)
+// 		return (TIME_PHILO_FORMAT_OUTPUT "is sleeping");
+// 	else if (event_type == EVENT_TYPE_THINKING)
+// 		return (TIME_PHILO_FORMAT_OUTPUT "is thinking");
+// 	else if (event_type == EVENT_TYPE_FULLY_EATEN)
+// 		return (TIME_PHILO_FORMAT_OUTPUT "is full");
+// 	else if (event_type == EVENT_TYPE_DIED)
+// 		return (TIME_PHILO_FORMAT_OUTPUT "died");
+// 	return (NULL);
+// }
 
 long int	print_event(t_philo *philo, t_event_type event_type)
 {
