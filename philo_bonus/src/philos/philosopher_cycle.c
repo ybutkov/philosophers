@@ -6,7 +6,7 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/31 19:52:51 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/31 19:54:34 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/10/31 19:59:28 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,4 +71,3 @@ void	philosopher_cycle(t_philo_data *philo_data, t_philo *philo)
 			break ;
 	}
 }
-

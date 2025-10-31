@@ -73,9 +73,11 @@ t : re
 
 v : re
 	valgrind --leak-check=full --show-leak-kinds=all \
-	--tool=memcheck --errors-for-leak-kinds=all -s ./$(NAME)  5 610 200 200 3
+	--tool=memcheck --errors-for-leak-kinds=all -s ./$(NAME)  6 180 181 60 2
+
 h : re
-	valgrind --tool=helgrind --history-level=full --num-callers=30 -s ./$(NAME) 5 610 200 200 3
+	valgrind --tool=helgrind --history-level=full --num-callers=30 -s ./$(NAME) 19 210 71 60 2
+
 
 .PHONY : all clean fclean re bonus
 
