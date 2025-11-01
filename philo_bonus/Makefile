@@ -6,11 +6,19 @@ BUILD_DIR =	build
 
 INCLUDES = -Iincludes
 
-PRINT_FLAG = -s --no-print-directory
+DEFAULT_SILENT ?= 1
+ifneq ($(filter s,$(MAKECMDGOALS)),)
+SILENT := 0
+else
+SILENT ?= $(DEFAULT_SILENT)
+endif
+ifeq ($(SILENT),1)
+MAKEFLAGS += -s --no-print-directory
+endif
 
 CC = cc
-# CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address,undefined
 CFLAGS = -Wall -Wextra -Werror -g -O0 $(INCLUDES)
+SAN_ASAN = -fsanitize=address,undefined -fno-omit-frame-pointer
 
 C_PHILO_FILES = \
 	printer/printer.c \
@@ -31,14 +39,13 @@ C_PHILO_FILES = \
 	utils/ft_memmove.c \
 	utils/ft_memset.c
 
-
-
 C_FIlES = $(addprefix $(SRC)/, $(C_PHILO_FILES))
 C_OBJ_FIlES =	$(C_FIlES:%.c=$(BUILD_DIR)/%.o)
 
 BUILD_DIRS := $(sort $(dir $(C_OBJ_FIlES)))
 
 all : $(NAME)
+
 bonus : all
 
 ${NAME} : $(BUILD_DIRS) $(C_OBJ_FIlES)
@@ -61,7 +68,12 @@ $(BUILD_DIRS):
 $(BUILD_DIR)/%.o : %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Add checking for all create, malloc, open and etc
+asan: CFLAGS += $(SAN_ASAN)
+asan: re
+
+.PHONY : all clean fclean re bonus s
+
+# Rules for testing
 t : re
 	./$(NAME) 5 50 20 20 4
 1 : re
@@ -73,13 +85,11 @@ t : re
 
 v : re
 	valgrind --leak-check=full --show-leak-kinds=all \
-	--tool=memcheck --errors-for-leak-kinds=all -s ./$(NAME)  6 180 181 60 2
+	--tool=memcheck --errors-for-leak-kinds=definite --run-libc-freeres=yes -s \
+	./$(NAME)  6 180 181 60 2
 
 h : re
 	valgrind --tool=helgrind --history-level=full --num-callers=30 -s ./$(NAME) 19 210 71 60 2
-
-
-.PHONY : all clean fclean re bonus
 
 #valgrind --leak-check=full --show-leak-kinds=all --errors-for-leak-kinds=all -s ./
 # python3 src/__main__.py /home/ybutkov/Documents/Curriculum/philosophers/philo_bonus
