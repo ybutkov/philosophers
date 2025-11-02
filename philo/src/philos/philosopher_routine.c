@@ -6,7 +6,7 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 13:53:57 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/11/02 16:18:08 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/11/02 16:43:37 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,6 @@ void	*philosopher_routine(void *arg)
 	if (philo->left_fork == philo->right_fork)
 		return (one_philosopher_routine(philo));
 	event_queue = philo->event_queue;
-	sleep_untill_time_ms(event_queue, philo->time_for_start);
 	if (philo->id % 2 == 0)
 		usleep(500);
 	while (philo->must_eat_times != 0)

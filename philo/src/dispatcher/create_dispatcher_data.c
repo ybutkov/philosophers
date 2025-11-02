@@ -6,7 +6,7 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/18 13:41:11 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/11/02 16:10:35 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/11/02 16:42:28 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,5 @@ t_dispatcher_data	*create_dispatcher_data(int number_of_philosophers,
 	dispatcher_data->time_to_die = time_to_die;
 	dispatcher_data->event_queue = event_queue;
 	dispatcher_data->start_time = get_time_in_milliseconds();
-	if (number_of_philosophers > 9)
-		dispatcher_data->start_time += DELAY_BEFORE_START_MS;
 	return (dispatcher_data);
 }
