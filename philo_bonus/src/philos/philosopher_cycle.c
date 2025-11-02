@@ -6,7 +6,7 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/31 19:52:51 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/11/01 19:26:24 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/11/02 19:04:38 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ void	philosopher_cycle(t_philo_data *philo_data, t_philo *philo)
 	while (eat_count)
 	{
 		philo->take_forks(philo);
+		if (philo->get_is_dead(philo) != STATUS_ALL_ALIVE)
+			break ;
 		last_meal_time = print_event(philo, EVENT_TYPE_EATING);
 		philo->set_last_meal_time(philo, last_meal_time);
 		if (eat_count > 0)
