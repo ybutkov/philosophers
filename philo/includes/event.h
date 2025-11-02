@@ -6,7 +6,7 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/16 13:52:20 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/24 20:16:12 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/11/02 15:52:47 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 
 # define EVENT_TYPE_COUNT 9
 # define TIME_PHILO_FORMAT_OUTPUT "%lu %d "
+# define DELAY_BEFORE_START_MS 1000
 
 typedef enum e_event_type
 {

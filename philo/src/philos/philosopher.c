@@ -6,7 +6,7 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/23 15:25:12 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/23 15:30:21 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/11/02 13:56:19 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ t_philo	*create_philo(int id, t_philo_data *data, t_event_queue *event_queue,
 	philo->event_queue = event_queue;
 	philo->left_fork = fork_pair.left_fork;
 	philo->right_fork = fork_pair.right_fork;
+	philo->time_for_start = data->time_for_start;
 	philo->last_meal_time = -1;
 	philo->take_left_fork = take_left_fork;
 	philo->take_right_fork = take_right_fork;

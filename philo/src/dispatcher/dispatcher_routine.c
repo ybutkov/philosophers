@@ -6,7 +6,7 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 13:12:22 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/10/24 20:22:48 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/11/02 15:24:38 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,15 @@
 #include <unistd.h>
 
 static long int	*init_time_eatings(int number_of_philosophers,
-		int **already_eaten)
+		int **already_eaten, long int start_time)
 {
 	long int	*time_eatings;
-	long int	start_time;
 	int			i;
 
 	time_eatings = malloc(sizeof(long int) * number_of_philosophers);
 	if (!time_eatings)
 		return (NULL);
 	i = 0;
-	start_time = get_time_in_milliseconds();
 	while (i < number_of_philosophers)
 	{
 		(*already_eaten)[i] = 0;
@@ -66,13 +64,17 @@ static int	is_finish_table(t_dispatcher_data *dispatcher_data,
 	return (*is_finish);
 }
 
-static int	prepare_inner_data_philos(int number_philos,
+static int	prepare_inner_data_philos(t_dispatcher_data *data,
 		long int **time_eatings, int **already_eaten, int *is_someone_dead)
 {
+	int	number_philos;
+
+	number_philos = data->number_of_philosophers;
 	*already_eaten = malloc(sizeof(int) * number_philos);
 	if (!already_eaten)
 		return (0);
-	*time_eatings = init_time_eatings(number_philos, already_eaten);
+	*time_eatings = init_time_eatings(number_philos, already_eaten,
+			data->start_time);
 	if (!time_eatings)
 		return (free(already_eaten), 0);
 	*is_someone_dead = 0;
@@ -86,10 +88,12 @@ static void	handle_events(t_dispatcher_data *dispatcher_data,
 	t_event			*event;
 
 	event_queue = dispatcher_data->event_queue;
-	while (event_queue->events->get_size(event_queue->events) > 0)
+	while (1)
 	{
 		event_queue = dispatcher_data->event_queue;
 		event = event_queue->pop_event(event_queue);
+		if (event == NULL)
+			break ;
 		if (event->event_type == EVENT_TYPE_FULLY_EATEN)
 			already_eaten[event->philo_id - 1] = 1;
 		else
@@ -116,8 +120,8 @@ void	*dispatcher_routine(void *arg)
 
 	dispatcher_data = (t_dispatcher_data *)arg;
 	event_queue = dispatcher_data->event_queue;
-	if (prepare_inner_data_philos(dispatcher_data->number_of_philosophers,
-			&time_eatings, &already_eaten, &is_finish) == 0)
+	if (prepare_inner_data_philos(dispatcher_data, &time_eatings,
+			&already_eaten, &is_finish) == 0)
 		return (NULL);
 	while (is_finish == 0)
 	{

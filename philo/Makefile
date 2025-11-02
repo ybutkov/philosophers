@@ -9,7 +9,7 @@ INCLUDES = -Iincludes
 PRINT_FLAG = -s --no-print-directory
 
 CC = cc
-# CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address,undefined
+# CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address,undefined -pthread 
 CFLAGS = -Wall -Wextra -Werror -g -O0 $(INCLUDES)
 
 C_PHILO_FILES = \
@@ -35,8 +35,6 @@ C_PHILO_FILES = \
 	structures/linked_list/ft_lst_clear.c \
 	structures/linked_list/ft_delete_node.c \
 	structures/linked_list/ft_lst_new.c
-
-
 
 C_FIlES = $(addprefix $(SRC)/, $(C_PHILO_FILES))
 C_OBJ_FIlES =	$(C_FIlES:%.c=$(BUILD_DIR)/%.o)
@@ -66,16 +64,15 @@ $(BUILD_DIRS):
 $(BUILD_DIR)/%.o : %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Add checking for all create, malloc, open and etc
 t : re
-	./$(NAME) 5 50 20 20 4
-# 	 198 610 200 200 10
+	./$(NAME) 19 610 200 200 10
 
 v : re
 	valgrind --leak-check=full --show-leak-kinds=all \
-	--tool=memcheck --errors-for-leak-kinds=all -s ./$(NAME)  1 180 60 60 5
+	--tool=memcheck --errors-for-leak-kinds=all -s ./$(NAME) 2 180 91 60 2
 h : re
-	valgrind --tool=helgrind --history-level=full --num-callers=30 ./$(NAME) 1 180 60 60 5
+	valgrind --tool=helgrind  -s ./$(NAME) 2 180 91 60 2
+# 	valgrind --tool=helgrind --history-level=full --num-callers=30 -s ./$(NAME) 1 180 60 60 5
 
 .PHONY : all clean fclean re bonus
 

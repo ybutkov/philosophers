@@ -6,7 +6,7 @@
 /*   By: ybutkov <ybutkov@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 14:08:36 by ybutkov           #+#    #+#             */
-/*   Updated: 2025/11/01 12:37:40 by ybutkov          ###   ########.fr       */
+/*   Updated: 2025/11/01 14:27:45 by ybutkov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ void	philosopher_action(t_philo_data *philo_data, int id)
 		one_philosopher(philo_data);
 	philo = init_philosopher(philo_data, id, &life_thread, &dead_thread);
 	print_event(philo, EVENT_TYPE_THINKING);
-	// sleep_untill_time_ms(philo, philo->last_meal_time + 2 * id);
+	sleep_untill_time_ms(philo, philo->last_meal_time + 1 * id);
 	philosopher_cycle(philo_data, philo);
 	status = philo->get_is_dead(philo);
 	pthread_join(life_thread, NULL);
